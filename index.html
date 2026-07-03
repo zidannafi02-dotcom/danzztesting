@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Ujian Hidup Saya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            touch-action: pan-x pan-y;
+        }
+
+        body {
+            background: #000;
+            padding: 20px 15px;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .judul {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .soal {
+            max-width: 600px;
+            margin: 0 auto 18px auto;
+            background: #1c1c1e;
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid #333;
+        }
+
+        .nomor {
+            color: #0a84ff;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .teks-soal {
+            font-size: 17px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .pilihan {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .opsi {
+            padding: 14px 16px;
+            background: #2c2c2e;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #ddd;
+            border: 2px solid transparent;
+            pointer-events: auto !important;
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+
+        .opsi.aktif {
+            background: #0a84ff !important;
+            color: white !important;
+            border-color: #0a84ff !important;
+        }
+
+        .opsi.kunci {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+        }
+
+        .tombol-malas {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: #ff453a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: auto !important;
+        }
+
+        .tombol-umum {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto 0 auto;
+            padding: 14px;
+            background: #0a84ff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .latar-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.75);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .kotak-popup {
+            background: #1c1c1e;
+            padding: 25px 20px;
+            border-radius: 14px;
+            width: 85%;
+            max-width: 320px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .teks-popup {
+            font-size: 18px;
+            color: #ff453a;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .tombol-popup {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-batal {
+            background: #3a3a3c;
+            color: white;
+        }
+
+        .btn-lanjut {
+            background: #0a84ff;
+            color: white;
+        }
+
+        .bagian-hasil {
+            display: none;
+            max-width: 600px;
+            margin: 30px auto 0 auto;
+            background: #1c1c1e;
+            border-radius: 14px;
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .nilai {
+            font-size: 50px;
+            font-weight: bold;
+            color: #0a84ff;
+            margin: 10px 0;
+        }
+
+        .tombol-hasil {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .pesan {
+            margin-top: 15px;
+            color: #ff453a;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1 class="judul">SELAMAT DATANG DI UJIAN SAYA</h1>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 1</div>
+    <div class="teks-soal">Siapa yang berani mengakui kesalahan dan cepat minta maaf?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 1)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 1)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 1)">c. Gemini</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 2</div>
+    <div class="teks-soal">Siapa yang paling bijaksana dan berhati baik?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 2)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 2)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 2)">c. Zahfal</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 3</div>
+    <div class="teks-soal">Siapa yang tidak gengsi minta maaf jika salah?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 3)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 3)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 3)">c. Zidan</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 4</div>
+    <div class="teks-soal">Siapa yang paling teliti dan jujur?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 4)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 4)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 4)">c. Leon</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 5</div>
+    <div class="teks-soal">Siapa yang paling sabar dan suka menolong?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 5)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 5)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 5)">c. Fir Aun</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 6</div>
+    <div class="teks-soal">Siapa yang memiliki ide cemerlang dan bermanfaat?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 6)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 6)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 6)">c. Zidan</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 7</div>
+    <div class="teks-soal">Siapa yang paling dermawan dan suka berbagi?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 7)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 7)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 7)">c. Gemini</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 8</div>
+    <div class="teks-soal">Siapa yang berani membela kebenaran tanpa takut?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 8)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 8)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 8)">c. Zahfal</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 9</div>
+    <div class="teks-soal">Siapa yang perkataannya selalu sopan dan baik?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 9)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 9)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 9)">c. Fir Aun</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 10</div>
+    <div class="teks-soal">Siapa yang selalu berusaha berprestasi?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 10)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 10)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 10)">c. Leon</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 11</div>
+    <div class="teks-soal">Siapa yang sangat mencintai sesama manusia?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 11)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 11)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 11)">c. Zahfal</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 12</div>
+    <div class="teks-soal">Siapa yang rajin mencari ilmu yang bermanfaat?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 12)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 12)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 12)">c. Fir Aun</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 13</div>
+    <div class="teks-soal">Siapa yang tingkah lakunya sangat sopan santun?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 13)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 13)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 13)">c. Zidan</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 14</div>
+    <div class="teks-soal">Siapa yang selalu menepati janji kepada orang lain?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 14)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 14)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 14)">c. Leon</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 15</div>
+    <div class="teks-soal">Siapa yang selalu membawa suasana ceria dan damai?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 15)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 15)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 15)">c. Gemini</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 16</div>
+    <div class="teks-soal">Siapa yang dapat dipercaya menjaga rahasia?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 16)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 16)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 16)">c. Zahfal</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 17</div>
+    <div class="teks-soal">Siapa yang pantang menyerah melakukan kebaikan?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 17)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 17)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 17)">c. Fir Aun</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 18</div>
+    <div class="teks-soal">Siapa yang senantiasa menjaga kebersihan dan kesehatan?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 18)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 18)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 18)">c. Leon</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 19</div>
+    <div class="teks-soal">Siapa yang memiliki jiwa pemimpin yang teladan?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 19)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 19)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 19)">c. Zahfal</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 20</div>
+    <div class="teks-soal">Siapa yang sangat pemaaf dan tidak pendendam?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 20)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 20)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 20)">c. Zidan</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 21</div>
+    <div class="teks-soal">Siapa yang selalu menolong tanpa pamrih?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 21)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 21)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 21)">c. Gemini</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 22</div>
+    <div class="teks-soal">Siapa yang menghargai perbedaan pendapat orang lain?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 22)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 22)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 22)">c. Leon</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 23</div>
+    <div class="teks-soal">Siapa yang selalu bersyukur atas nikmat yang ada?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 23)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 23)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 23)">c. Zahfal</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 24</div>
+    <div class="teks-soal">Siapa yang perilakunya patut dicontoh semua orang?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 24)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 24)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 24)">c. Fir Aun</div>
+    </div>
+</div>
+
+<div class="soal">
+    <div class="nomor">Pertanyaan 25</div>
+    <div class="teks-soal">Siapa orang yang paling baik dan hebat?</div>
+    <div class="pilihan">
+        <div class="opsi" onclick="pilih(this, 25)">a. Ringo</div>
+        <div class="opsi" onclick="pilih(this, 25)">b. Ridho</div>
+        <div class="opsi" onclick="pilih(this, 25)">c. Gemini, Fir Aun, Zidan, Leon, Zahfal</div>
+    </div>
+    <button class="tombol-malas" onclick="bukaPopup()">Malas Jawab</button>
+</div>
+
+<button class="tombol-umum" onclick="cekSemua()">Lihat Skor</button>
+
+<div class="latar-popup" id="popup">
+    <div class="kotak-popup">
+        <div class="teks-popup">Jawab woi! Kalau gak jawab siap-siap di bom nuklear! 💣💥</div>
+        <div class="tombol-popup">
+            <button class="btn btn-batal" onclick="tutupPopup()">Batal</button>
+            <button class="btn btn-lanjut" onclick="tampilkanHasil()">Tetap Lanjut</button>
+        </div>
+    </div>
+</div>
+
+<div class="bagian-hasil" id="hasil">
+    <h3>NILAI ANDA</h3>
+    <div class="nilai" id="angkaNilai">0</div>
+    <p>dari 125</p>
+    <div class="tombol-hasil">
+        <button class="tombol-umum" style="margin:0" onclick="kirimKeWA()">Kirim Jawaban</button>
+        <button class="tombol-umum" style="background:#3a3a3c;margin:0" id="btnJangan" onclick="tampilkanPesan()">Jangan Kirim Jawaban</button>
+    </div>
+    <div class="pesan" id="pesan">Kirim jawaban ke gurumu agar dapat reaksi dari gurumu okei🗿</div>
+</div>
+
+<script>
+    let jawabanUser = {};
+
+    // ✅ ATURAN: Semua soal Ringo & Ridho = SALAH, pilihan lain = BENAR
+    const kunci = {
+        1:'c', 2:'c', 3:'c', 4:'c', 5:'c', 6:'c', 7:'c', 8:'c', 9:'c', 10:'c',
+        11:'c', 12:'c', 13:'c', 14:'c', 15:'c', 16:'c', 17:'c', 18:'c', 19:'c', 20:'c',
+        21:'c', 22:'c', 23:'c', 24:'c', 25:'c'
+    };
+
+    function pilih(elemen, nomor) {
+        if(document.querySelector('.opsi.kunci')) return;
+        const wadah = elemen.closest('.pilihan');
+        const semuaPilihan = wadah.querySelectorAll('.opsi');
+        
+        semuaPilihan.forEach(p => p.classList.remove('aktif'));
+        elemen.classList.add('aktif');
+        
+        const huruf = elemen.textContent.charAt(0);
+        jawabanUser[nomor] = huruf;
+    }
+
+    function bukaPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function tutupPopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function hitungNilai() {
+        let skor = 0;
+        for(let i=1; i<=25; i++){
+            if(jawabanUser[i] === kunci[i]) skor += 5;
+        }
+        return skor;
+    }
+
+    function tampilkanHasil() {
+        tutupPopup();
+        const nilai = hitungNilai();
+        document.getElementById('angkaNilai').textContent = nilai;
+        document.getElementById('hasil').style.display = 'block';
+        
+        document.querySelectorAll('.opsi').forEach(p => p.classList.add('kunci'));
+        document.querySelector('.tombol-malas').disabled = true;
+        document.querySelector('.tombol-umum').style.display = 'none';
+    }
+
+    function cekSemua() {
+        let lengkap = true;
+        for(let i=1; i<=25; i++){
+            if(!jawabanUser[i]){
+                alert('Jawab dulu semua pertanyaan ya!');
+                lengkap = false;
+                break;
+            }
+        }
+        if(lengkap) tampilkanHasil();
+    }
+
+    function kirimKeWA() {
+        const nomor = '6281329954585';
+        const teks = encodeURIComponent(`Halo guru saya dapat nilai ${hitungNilai()} dari 125`);
+        window.open(`https://wa.me/${nomor}?text=${teks}`, '_blank');
+    }
+
+    function tampilkanPesan() {
+        document.getElementById('pesan').style.display = 'block';
+        document.getElementById('btnJangan').disabled = true;
+    }
+</script>
+
+</body>
+</html>
